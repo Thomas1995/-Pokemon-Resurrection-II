@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{73c9467c-1364-40b2-9fd9-d8b09c3cfb6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{a11438a5-b573-4d94-8a2d-5deecc2eb05c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pokemons">
+      <UniqueIdentifier>{68b3eaac-93a1-49df-8216-2f5fe3aef01f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pokemons">
+      <UniqueIdentifier>{ab76c11c-8d6d-462c-a0ec-bc9952b9255b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -28,7 +40,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\Game.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pokemons\Pokemon.h">
+      <Filter>Header Files\Pokemons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,11 +53,14 @@
     <ClCompile Include="src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\utils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pokemons\Pokemon.cpp">
+      <Filter>Source Files\Pokemons</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -35,6 +35,7 @@ Game::Game(const Size screenSize, const int style) :
 	window.setFramerateLimit(60);
 
 	// TODO: load an icon
+	// hint: window.SetIcon(image.GetWidth(), image.GetHeight(), image.GetPixelsPtr());
 	sf::Uint8 ico[32 * 32 * 4 + 1];
 	window.setIcon(32, 32, ico);
 }
