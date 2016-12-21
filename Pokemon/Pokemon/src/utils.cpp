@@ -25,7 +25,11 @@ double percentage(double x, int p) {
 }
 
 int random() {
-	srand(time(NULL));
+	static bool seed = []() {
+		srand(time(NULL));
+		return true;
+	}();
+	
 	return rand();
 }
 

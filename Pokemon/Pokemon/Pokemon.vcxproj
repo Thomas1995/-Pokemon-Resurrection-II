@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="include\Game\Game.h" />
     <ClInclude Include="include\Pokemons\Pokemon.h" />
+    <ClInclude Include="include\Pokemons\Types.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="include\utils.h" />

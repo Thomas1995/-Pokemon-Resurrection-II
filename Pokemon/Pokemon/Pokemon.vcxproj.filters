@@ -45,6 +45,9 @@
     <ClInclude Include="include\Pokemons\Pokemon.h">
       <Filter>Header Files\Pokemons</Filter>
     </ClInclude>
+    <ClInclude Include="include\Pokemons\Types.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

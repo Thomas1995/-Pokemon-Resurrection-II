@@ -10,3 +10,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "utils.h"
+
+const int maxPokedexEntry = 649;
+const std::string resourcesFolder = "resources//";

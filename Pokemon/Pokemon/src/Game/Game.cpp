@@ -17,6 +17,11 @@ Game* Game::getInstance() {
 }
 
 void Game::start() {
+	/*sf::Texture texture;
+	if (!texture.loadFromFile("resources\\Sprites\\Pokemon\\front\\normal\\6.png"))
+		return;
+	sf::Sprite sprite(texture);*/
+
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event))

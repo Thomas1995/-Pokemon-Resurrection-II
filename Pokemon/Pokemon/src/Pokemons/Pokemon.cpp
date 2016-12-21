@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Pokemons\Pokemon.h"
+#include <fstream>
 
 double Pokemon::getHappiness() {
 	auto f = [](const size_t x) {
@@ -25,7 +26,6 @@ double Pokemon::getHappiness() {
 		&Pokemon::getAnger,
 	};
 
-	// TODO: test this!
 	for (int i = 0; i < 4; ++i) {
 		double p = (this->*otherFeelingsFcts[i])();
 		if (p > 0.5) {
@@ -188,7 +188,8 @@ Pokemon::Health::Health()
 	isSick(false), hunger(0), repugnance(0),
 	sanity(random(0.0, 0.6)) {}
 
-Pokemon::Stats::Stats(int SPD, int HP, int ATK, int DEF, int SPATK, int SPDEF) 
+Pokemon::Stats::Stats(const int HP, const int ATK, const int DEF, 
+	const int SPATK, const int SPDEF, const int SPD)
 	: speed(SPD), hp(HP), attack(ATK), defense(DEF), 
 	spattack(SPATK), spdefense(SPDEF), 
 	accuracy(1), evasiveness(1) {}
@@ -229,10 +230,79 @@ Pokemon::Pokemon(const int no, const std::string place, double crtAge)
 		age = crtAge;
 
 	BMI = weight / (height * height);
+
+	shiny = random(1, 100) < 99 ? false : true;
 }
 
 Pokemon* Pokemon::getStarter(const int no) {
 	Pokemon* pokemon = new Pokemon(no, "Laboratory", 1);
 	pokemon->traits.obedience = 1;
+	pokemon->shiny = false;
 	return pokemon;
+}
+
+std::string Pokemon::getNameByPokedexEntry(const int no) {
+	static std::vector<std::string> names = []() {
+		std::vector<std::string> names(maxPokedexEntry);
+		std::ifstream file(resourcesFolder + "Bins\\names.bin");
+
+		for (int i = 0; i < names.size(); ++i)
+			file >> names[i];
+
+		file.close();
+		return names;
+	}();
+
+	return names[no - 1];
+}
+
+Pokemon::Stats Pokemon::getStatsByPokedexEntry(const int no) {
+	static std::vector<int[6]> stats = []() {
+		std::vector<int[6]> stats(maxPokedexEntry);
+		std::ifstream file(resourcesFolder + "Bins\\stats.bin", 
+			std::ios::binary | std::ios::in);
+
+		for (int i = 0; i < stats.size(); ++i)
+			for (int j = 0; j < 6; ++j)
+				file.read((char*)&stats[i][j], sizeof(int));
+
+		file.close();
+		return stats;
+	}();
+
+	return Stats(
+		stats[no - 1][0],
+		stats[no - 1][1],
+		stats[no - 1][2],
+		stats[no - 1][3],
+		stats[no - 1][4],
+		stats[no - 1][5]
+	);
+}
+
+Types::Type Pokemon::getTypeByPokedexEntry(const int no, const int typeNo) {
+	static std::vector<int[2]> types = []() {
+		std::vector<int[2]> types(maxPokedexEntry);
+		std::ifstream file(resourcesFolder + "Bins\\types.bin",
+			std::ios::binary | std::ios::in);
+
+		for (int i = 0; i < types.size(); ++i)
+			for (int j = 0; j < 2; ++j)
+				file.read((char*)&types[i][j], sizeof(int));
+
+		file.close();
+		return types;
+	}();
+
+	return (Types::Type)types[no - 1][typeNo - 1];
+}
+
+Pokemon::Genders::Gender Pokemon::getGenderByPokedexEntry(const int no) {
+	// TODO
+	return Genders::male;
+}
+
+std::pair<double, double> Pokemon::getMeasurementsByPokedexEntry(const int no) {
+	// TODO
+	return std::make_pair(0.1, 0.1);
 }

@@ -2,28 +2,7 @@
 
 #include <vector>
 #include <string>
-
-enum Type {
-	none,
-	normal,
-	fire,
-	water,
-	electricity,
-	grass,
-	ice,
-	fight,
-	poison,
-	ground,
-	flying,
-	psychic,
-	bug,
-	rock,
-	ghost,
-	dragon,
-	dark,
-	steel,
-	fairy
-};
+#include "Types.h"
 
 class Pokemon {
 public:
@@ -53,7 +32,8 @@ public:
 		double accuracy, evasiveness;
 		int speed, hp, attack, defense, spattack, spdefense;
 
-		Stats(int SPD, int HP, int ATK, int DEF, int SPATK, int SPDEF);
+		Stats(const int HP, const int ATK, const int DEF, 
+			const int SPATK, const int SPDEF, const int SPD);
 	};
 
 	struct Health {
@@ -112,7 +92,8 @@ public:
 	const int pokedexEntry;
 	const Genders::Gender gender;
 	const Personalities::Personality personality;
-	const Type type1, type2;
+	const Types::Type type1, type2;
+	bool shiny;
 
 	double age;
 	const double height;
@@ -149,11 +130,11 @@ private:
 
 	bool hasCrushOn(const Pokemon* const pokemon);
 
-	static std::string getNameByPokedexEntry(int no);
-	static Stats getStatsByPokedexEntry(int no);
-	static Genders::Gender getGenderByPokedexEntry(int no);
-	static Type getTypeByPokedexEntry(int no, int typeNo);
-	static std::pair<double, double> getMeasurementsByPokedexEntry(int no);
+	static std::string getNameByPokedexEntry(const int no);
+	static Stats getStatsByPokedexEntry(const int no);
+	static Genders::Gender getGenderByPokedexEntry(const int no);
+	static Types::Type getTypeByPokedexEntry(const int no, const int typeNo);
+	static std::pair<double, double> getMeasurementsByPokedexEntry(const int no);
 };
 
 namespace PokemonLimits {
