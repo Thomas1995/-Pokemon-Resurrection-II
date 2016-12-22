@@ -237,7 +237,7 @@ Pokemon::Pokemon(const int no, const std::string place, double crtAge)
 Pokemon* Pokemon::getStarter(const int no) {
 	Pokemon* pokemon = new Pokemon(no, "Laboratory", 1);
 	pokemon->traits.obedience = 1;
-	pokemon->shiny = false;
+	pokemon->shiny = true;
 	return pokemon;
 }
 
@@ -297,12 +297,56 @@ Types::Type Pokemon::getTypeByPokedexEntry(const int no, const int typeNo) {
 	return (Types::Type)types[no - 1][typeNo - 1];
 }
 
-Pokemon::Genders::Gender Pokemon::getGenderByPokedexEntry(const int no) {
-	// TODO
-	return Genders::male;
+std::pair<double, double> Pokemon::getMeasurementsByPokedexEntry(const int no) {
+	static std::vector<float[2]> measurements = []() {
+		std::vector<float[2]> measurements(maxPokedexEntry);
+		std::ifstream file(resourcesFolder + "Bins\\measurement.bin",
+			std::ios::binary | std::ios::in);
+
+		for (int i = 0; i < measurements.size(); ++i)
+			for (int j = 0; j < 2; ++j)
+				file.read((char*)&measurements[i][j], sizeof(float));
+
+		file.close();
+		return measurements;
+	}();
+
+	return std::make_pair(
+		(double)measurements[no - 1][0], 
+		(double)measurements[no - 1][1]
+	);
 }
 
-std::pair<double, double> Pokemon::getMeasurementsByPokedexEntry(const int no) {
-	// TODO
-	return std::make_pair(0.1, 0.1);
+Pokemon::Genders::Gender Pokemon::getGenderByPokedexEntry(const int no) {
+	static std::pair< std::vector<int> , std::vector< std::pair<int, int> > > genders = []() {
+		std::pair< std::vector<int>, std::vector< std::pair<int, int> > > genders;
+		genders.first.resize(maxPokedexEntry);
+		std::ifstream file(resourcesFolder + "Bins\\gender.bin",
+			std::ios::binary | std::ios::in);
+
+		int femaleRatio, maleRatio, count, entry;
+		while (file.read((char*)&femaleRatio, sizeof(int))) {
+			file.read((char*)&maleRatio, sizeof(int));
+
+			genders.second.push_back(std::make_pair(femaleRatio, maleRatio));
+
+			file.read((char*)&count, sizeof(int));
+			for (int i = 0; i < count; ++i) {
+				file.read((char*)&entry, sizeof(int));
+				genders.first[entry - 1] = genders.second.size();
+			}
+		}		
+
+		file.close();
+		return genders;
+	}();
+
+	const std::pair<int, int> ratio = genders.second[genders.first[no - 1] - 1];
+
+	if (ratio.first == 0 && ratio.second == 0) {
+		return Genders::none;
+	}
+
+	return random(1, ratio.first + ratio.second) <= ratio.first 
+		? Genders::female : Genders::male;
 }
