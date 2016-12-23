@@ -1,19 +1,20 @@
 #pragma once
 
+#include "stdafx.h"
+
 class Game {
 	static Game* instance;
 	sf::RenderWindow window;
 
 public:
-	const Size size;
+	const Size<unsigned int> size;
 
-public:
-	static Game* initialize(const Size screenSize, const bool fullscreen = false);
+	static Game* initialize(const Size<unsigned int> screenSize, const bool fullscreen = false);
 	static Game* getInstance();
 	void start();
 
 private:
-	Game(const Size screenSize, const int style);
+	Game(const Size<unsigned int> screenSize, const int style);
 	~Game();
 
 	void onFrameUpdate();

@@ -1,10 +1,11 @@
 #include "stdafx.h"
-#include "assert.h"
+#include <assert.h>
 #include "Game\Game.h"
+#include "Game\Scene.h"
 
 Game* Game::instance = nullptr;
 
-Game* Game::initialize(const Size screenSize, const bool fullscreen) {
+Game* Game::initialize(const Size<unsigned int> screenSize, const bool fullscreen) {
 	assert(nullptr == instance);
 	instance = new Game(screenSize, 
 		fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar | sf::Style::Close);
@@ -17,11 +18,6 @@ Game* Game::getInstance() {
 }
 
 void Game::start() {
-	/*sf::Texture texture;
-	if (!texture.loadFromFile("resources\\Sprites\\Pokemon\\front\\normal\\6.png"))
-		return;
-	sf::Sprite sprite(texture);*/
-
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -33,11 +29,11 @@ void Game::start() {
 	}
 }
 
-Game::Game(const Size screenSize, const int style) : 
+Game::Game(const Size<unsigned int> screenSize, const int style) :
 	size(screenSize), 
 	window(sf::VideoMode(screenSize.width, screenSize.height), 
 		"Pokemon Resurrection II", style) {
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(30);
 
 	// TODO: load an icon
 	// hint: window.SetIcon(image.GetWidth(), image.GetHeight(), image.GetPixelsPtr());
@@ -55,5 +51,5 @@ void Game::onEvent(const sf::Event& event) {
 }
 
 void Game::onFrameUpdate() {
-
+	Scene::getInstance()->Draw(window);
 }

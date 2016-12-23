@@ -97,7 +97,7 @@
       <AdditionalIncludeDirectories>D:\Projects\SFML-2.4.1\x86\include;$(SolutionDir)$(SolutionName)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\Projects\SFML-2.4.1\x86\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -113,7 +113,7 @@
       <AdditionalIncludeDirectories>D:\Projects\SFML-2.4.1\x64\include;$(SolutionDir)$(SolutionName)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\Projects\SFML-2.4.1\x64\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -131,7 +131,7 @@
       <AdditionalIncludeDirectories>D:\Projects\SFML-2.4.1\x86\include;$(SolutionDir)$(SolutionName)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -150,7 +150,7 @@
       <AdditionalIncludeDirectories>D:\Projects\SFML-2.4.1\x64\include;$(SolutionDir)$(SolutionName)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -162,14 +162,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game\Game.h" />
+    <ClInclude Include="include\Game\Graphics.h" />
+    <ClInclude Include="include\Game\Scene.h" />
     <ClInclude Include="include\Pokemons\Pokemon.h" />
+    <ClInclude Include="include\Pokemons\Trainer.h" />
     <ClInclude Include="include\Pokemons\Types.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="include\utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\Pokemons\Trainer.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\Game\Graphics.cpp" />
+    <ClCompile Include="src\Game\Scene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Pokemons\Pokemon.cpp" />
     <ClCompile Include="src\stdafx.cpp">

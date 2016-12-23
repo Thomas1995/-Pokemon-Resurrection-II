@@ -12,4 +12,4 @@
 #include "utils.h"
 
 const int maxPokedexEntry = 649;
-const std::string resourcesFolder = "resources//";
+const std::string resourcesFolder = "resources\\";

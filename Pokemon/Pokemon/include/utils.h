@@ -1,10 +1,20 @@
 #pragma once
 
+template <typename T>
 struct Size {
-	unsigned int width, height;
+	T width, height;
 
-	Size();
-	Size(const unsigned int width, const unsigned int height);
+	Size() : width(0), height(0) {}
+	Size(const T width, const T height)
+		: width(width), height(height) {}
+};
+
+template <typename T>
+struct Position {
+	T X, Y;
+
+	Position() : X(0), Y(0) {}
+	Position(const T x, const T y) : X(x), Y(y) {}
 };
 
 /*

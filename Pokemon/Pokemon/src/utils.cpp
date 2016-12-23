@@ -3,16 +3,6 @@
 #include <assert.h>
 #include <time.h>
 
-Size::Size() {
-	this->width = 0;
-	this->height = 0;
-}
-
-Size::Size(const unsigned int width, const unsigned int height) {
-	this->width = width;
-	this->height = height;
-}
-
 double normalize(double x, const double a, const double b) {
 	assert(a <= b);
 	x = max(x, a);
@@ -26,7 +16,7 @@ double percentage(double x, int p) {
 
 int random() {
 	static bool seed = []() {
-		srand(time(NULL));
+		srand((unsigned int)time(NULL));
 		return true;
 	}();
 	
@@ -40,6 +30,6 @@ int random(int a, int b) {
 
 double random(double a, double b) {
 	assert(a <= b);
-	const int precision = 1e5;
+	const int precision = (int)1e5;
 	return (double)random((int)(a * precision), (int)(b * precision)) / precision;
 }
