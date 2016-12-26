@@ -1,12 +1,18 @@
 #pragma once
 
 #include "..\Pokemons\Trainer.h"
+#include "Game\Graphics.h"
+#include <atomic>
 
 class Scene {
 	static Scene* instance;
 
 public:
-	virtual void Draw(sf::RenderWindow& window) = 0;
+	static std::atomic<int> userActionsDisabledCount;
+	Scene();
+
+	virtual void draw(sf::RenderWindow& window) = 0;
+	virtual void logic() = 0;
 
 	static void updateInstance(Scene* inst);
 	static void releaseInstance();
@@ -15,9 +21,19 @@ public:
 
 class TrainerBattleScene : public Scene {
 public:
-	const Trainer *trainerA, *trainerB;
+	Trainer *trainerA, *trainerB;
+	Pokemon *pokemonA, *pokemonB;
 
-	TrainerBattleScene(const Trainer* A, const Trainer* B);
+	/*
+		A v.s. B
+	*/
+	TrainerBattleScene(Trainer* A, Trainer* B);
 
-	void Draw(sf::RenderWindow& window);
+	void draw(sf::RenderWindow& window);
+	void logic();
+	void switchOut(Trainer* trainer, Pokemon* chosenPokemon);
+private:
+	Graphics::Console console;
+
+	void turn(Trainer* trainer);
 };

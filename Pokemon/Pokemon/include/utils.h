@@ -41,3 +41,13 @@ int random(int a, int b);
 	Gets a random double between a and b.
 */
 double random(double a, double b);
+
+/*
+	Checks if left <= item <= right
+*/
+template<typename T>
+inline bool isBetween(T item, T left, T right) {
+	if (item >= left && item <= right)
+		return true;
+	return false;
+}

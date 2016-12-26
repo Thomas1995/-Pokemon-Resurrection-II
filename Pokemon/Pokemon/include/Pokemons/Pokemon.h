@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "Types.h"
+#include "Attack.h"
 
 class Pokemon {
 public:
@@ -102,6 +103,7 @@ public:
 	Stats currentStats;
 	Health health;
 	Traits traits;
+	std::vector<Attack> moves;
 
 	Statistics statistics;
 
@@ -127,6 +129,7 @@ private:
 	std::vector<Pokemon*> crushes;
 	std::vector<Pokemon*> friends;
 	std::vector<Pokemon*> rivals;
+	std::vector<Effect> effectsInBattle;
 
 	bool hasCrushOn(const Pokemon* const pokemon);
 

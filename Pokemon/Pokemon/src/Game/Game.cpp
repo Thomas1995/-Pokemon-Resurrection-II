@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Game\Game.h"
 #include "Game\Scene.h"
+#include <thread>
 
 Game* Game::instance = nullptr;
 
@@ -17,7 +18,36 @@ Game* Game::getInstance() {
 	return instance;
 }
 
+void Game::initializeScene() {
+	Pokemon* pokemon1 = Pokemon::getStarter(649);
+	Pokemon* pokemon2 = Pokemon::getStarter(4);
+	//pokemon1->currentStats.hp = 0;
+	Trainer *me = new MainTrainer("Thomas"), *enemy = new Trainer("Cristian");
+	me->pokemonInTeam.push_back(pokemon1);
+	me->pokemonInTeam.push_back(new Pokemon(122));
+	me->pokemonInTeam.push_back(new Pokemon(123));
+	me->pokemonInTeam.push_back(new Pokemon(124));
+	me->pokemonInTeam.push_back(new Pokemon(25));
+	me->pokemonInTeam.push_back(new Pokemon(120));
+	enemy->pokemonInTeam.push_back(pokemon2);
+
+	Scene::updateInstance(new TrainerBattleScene(me, enemy));
+
+	auto inst = Scene::getInstance();
+}
+
+void Game::gameLogic() {
+	while (true) {
+		Scene::getInstance()->logic();
+	}
+}
+
 void Game::start() {
+	initializeScene();
+
+	std::thread t(&Game::gameLogic, this);
+	t.detach();
+
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -51,5 +81,5 @@ void Game::onEvent(const sf::Event& event) {
 }
 
 void Game::onFrameUpdate() {
-	Scene::getInstance()->Draw(window);
+	Scene::getInstance()->draw(window);
 }

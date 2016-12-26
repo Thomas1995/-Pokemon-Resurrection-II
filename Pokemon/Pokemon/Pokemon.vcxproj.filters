@@ -45,9 +45,6 @@
     <ClInclude Include="include\Pokemons\Pokemon.h">
       <Filter>Header Files\Pokemons</Filter>
     </ClInclude>
-    <ClInclude Include="include\Pokemons\Types.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\Pokemons\Trainer.h">
       <Filter>Header Files\Pokemons</Filter>
     </ClInclude>
@@ -56,6 +53,12 @@
     </ClInclude>
     <ClInclude Include="include\Game\Graphics.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pokemons\Attack.h">
+      <Filter>Header Files\Pokemons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pokemons\Types.h">
+      <Filter>Header Files\Pokemons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,11 +80,14 @@
     <ClCompile Include="src\Game\Scene.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="include\Pokemons\Trainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\Graphics.cpp">
       <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Pokemons\Trainer.cpp">
+      <Filter>Source Files\Pokemons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pokemons\Attack.cpp">
+      <Filter>Source Files\Pokemons</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,3 +10,6 @@
 *.ipch
 *.txt
 *.enc
+*.iobj
+*.ipdb
+*.opendb

@@ -333,7 +333,7 @@ Pokemon::Genders::Gender Pokemon::getGenderByPokedexEntry(const int no) {
 			file.read((char*)&count, sizeof(int));
 			for (int i = 0; i < count; ++i) {
 				file.read((char*)&entry, sizeof(int));
-				genders.first[entry - 1] = genders.second.size();
+				genders.first[entry - 1] = (int)genders.second.size();
 			}
 		}		
 

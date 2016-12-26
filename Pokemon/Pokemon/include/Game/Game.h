@@ -17,6 +17,9 @@ private:
 	Game(const Size<unsigned int> screenSize, const int style);
 	~Game();
 
+	static void initializeScene();
+
+	void gameLogic();
 	void onFrameUpdate();
 	void Game::onEvent(const sf::Event& event);
 };

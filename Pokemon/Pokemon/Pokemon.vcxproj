@@ -136,6 +136,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Projects\SFML-2.4.1\x86\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,6 +156,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Projects\SFML-2.4.1\x64\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -164,6 +166,7 @@
     <ClInclude Include="include\Game\Game.h" />
     <ClInclude Include="include\Game\Graphics.h" />
     <ClInclude Include="include\Game\Scene.h" />
+    <ClInclude Include="include\Pokemons\Attack.h" />
     <ClInclude Include="include\Pokemons\Pokemon.h" />
     <ClInclude Include="include\Pokemons\Trainer.h" />
     <ClInclude Include="include\Pokemons\Types.h" />
@@ -177,6 +180,7 @@
     <ClCompile Include="src\Game\Graphics.cpp" />
     <ClCompile Include="src\Game\Scene.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Pokemons\Attack.cpp" />
     <ClCompile Include="src\Pokemons\Pokemon.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
