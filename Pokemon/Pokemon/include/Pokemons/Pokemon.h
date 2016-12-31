@@ -63,9 +63,6 @@ public:
 		double sanity, repugnance;
 		std::vector<Trauma> traumas;
 
-		int frozen, asleep, poisoned,
-			burnt, paralyzed, confused;
-
 		Health();
 	};
 
@@ -100,7 +97,7 @@ public:
 	const double height;
 	double weight, BMI;
 
-	Stats currentStats;
+	Stats currentStats, maxStats;
 	Health health;
 	Traits traits;
 	std::vector<Attack> moves;
@@ -116,23 +113,30 @@ public:
 	double getDisgust();
 	double getTrust();
 	double getBoredom();
+	double getWillToFight();
 
 	bool inLove();
 	bool isFainted();
 
-	//double getWillToFight();
+	std::vector<Attack*> getAvailableMoves();
+
 	//void Eat();
 
-private:
-	Stats maxStats;
+	// in battle
+	std::vector<Effect> effectsInBattle;
+	int timesBackOnFeet;
 
+	void receiveDamage(int damage, Attack* move, Pokemon* attacker);
+	void receiveDamage(int damage);
+
+private:
 	std::vector<Pokemon*> crushes;
 	std::vector<Pokemon*> friends;
 	std::vector<Pokemon*> rivals;
-	std::vector<Effect> effectsInBattle;
 
 	bool hasCrushOn(const Pokemon* const pokemon);
 
+	// information
 	static std::string getNameByPokedexEntry(const int no);
 	static Stats getStatsByPokedexEntry(const int no);
 	static Genders::Gender getGenderByPokedexEntry(const int no);

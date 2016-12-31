@@ -19,8 +19,11 @@ Game* Game::getInstance() {
 }
 
 void Game::initializeScene() {
-	Pokemon* pokemon1 = Pokemon::getStarter(649);
-	Pokemon* pokemon2 = Pokemon::getStarter(4);
+	Pokemon* pokemon1 = Pokemon::getStarter(35);
+	Pokemon* pokemon2 = Pokemon::getStarter(1);
+	pokemon1->moves.push_back(Attack::get("Tackle"));
+	//pokemon1->moves[0].pp = 1;
+	pokemon2->moves.push_back(Attack::get("Pound"));
 	//pokemon1->currentStats.hp = 0;
 	Trainer *me = new MainTrainer("Thomas"), *enemy = new Trainer("Cristian");
 	me->pokemonInTeam.push_back(pokemon1);
@@ -30,6 +33,7 @@ void Game::initializeScene() {
 	me->pokemonInTeam.push_back(new Pokemon(25));
 	me->pokemonInTeam.push_back(new Pokemon(120));
 	enemy->pokemonInTeam.push_back(pokemon2);
+	enemy->pokemonInTeam.push_back(new Pokemon(5));
 
 	Scene::updateInstance(new TrainerBattleScene(me, enemy));
 

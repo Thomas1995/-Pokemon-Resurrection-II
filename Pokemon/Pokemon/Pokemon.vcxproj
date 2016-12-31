@@ -175,13 +175,14 @@
     <ClInclude Include="include\utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\Pokemons\Trainer.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\Graphics.cpp" />
     <ClCompile Include="src\Game\Scene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Pokemons\Attack.cpp" />
     <ClCompile Include="src\Pokemons\Pokemon.cpp" />
+    <ClCompile Include="src\Pokemons\Trainer.cpp" />
+    <ClCompile Include="src\Pokemons\Types.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

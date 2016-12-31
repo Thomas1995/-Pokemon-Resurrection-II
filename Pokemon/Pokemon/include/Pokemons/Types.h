@@ -23,3 +23,7 @@ struct Types {
 		fairy
 	};
 };
+
+double getTypeAdvantage(Types::Type attackType, Types::Type defenderType);
+double getTypeAdvantageOverPokemon(Types::Type attackType, 
+	Types::Type defenderType1, Types::Type defenderType2);

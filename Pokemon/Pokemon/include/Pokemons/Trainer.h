@@ -15,6 +15,8 @@ public:
 	Trainer(const std::string trainerName);
 
 	virtual void takeTurnInBattle();
+
+	bool checkIfTeamDead();
 };
 
 class MainTrainer : public Trainer {

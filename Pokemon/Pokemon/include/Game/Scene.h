@@ -23,17 +23,29 @@ class TrainerBattleScene : public Scene {
 public:
 	Trainer *trainerA, *trainerB;
 	Pokemon *pokemonA, *pokemonB;
+	Graphics::Console console;
 
 	/*
 		A v.s. B
 	*/
 	TrainerBattleScene(Trainer* A, Trainer* B);
 
+	void onBattleStart();
+	void onBattleFinish();
 	void draw(sf::RenderWindow& window);
 	void logic();
 	void switchOut(Trainer* trainer, Pokemon* chosenPokemon);
-private:
-	Graphics::Console console;
+	void pokemonWantsToUseMove(Pokemon* attacker, Pokemon* target, Attack* move);
+	void pokemonUsesMove(Pokemon* attacker, Pokemon* target, Attack* move);
 
-	void turn(Trainer* trainer);
+private:
+	struct InternalAtk {
+		Pokemon *attacker, *target;
+		Attack *move;
+
+		InternalAtk(Pokemon* attacker, Pokemon* target, Attack* move);
+	};
+	std::vector<InternalAtk> atk;
+
+	void restorePokemonToDefault(Trainer* trainer);
 };

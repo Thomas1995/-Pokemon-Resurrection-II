@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Pokemons\Pokemon.h"
+#include "Game\Scene.h"
 #include <fstream>
 
 double Pokemon::getHappiness() {
@@ -146,6 +147,20 @@ double Pokemon::getAnger() {
 	return normalize(anger);
 }
 
+double Pokemon::getWillToFight() {
+	// it needs trust or anger to get back on feet
+	double willToFight = max(getAnger(), getTrust());
+
+	// the courage raises the will to fight
+	willToFight += percentage(traits.courage, 20);
+
+	// a stubborn pokemon tends to get again on his feet more
+	if (personality == Personalities::stubborn)
+		willToFight += 0.2;
+
+	return normalize(willToFight / ++timesBackOnFeet);
+}
+
 bool Pokemon::hasCrushOn(const Pokemon* const pokemon) {
 	if (std::find(crushes.begin(), crushes.end(), pokemon) != crushes.end())
 		return true;
@@ -162,6 +177,16 @@ bool Pokemon::inLove() {
 
 bool Pokemon::isFainted() {
 	return (currentStats.hp == 0);
+}
+
+std::vector<Attack*> Pokemon::getAvailableMoves() {
+	std::vector<Attack*> availableMoves;
+
+	for (int i = 0; i < moves.size(); ++i)
+		if (moves[i].isUsable())
+			availableMoves.push_back(&moves[i]);
+
+	return availableMoves;
 }
 
 Pokemon::Statistics::Statistics(const std::string place) 
@@ -183,9 +208,7 @@ Pokemon::Health::Trauma::Trauma(const double age, const Cause c, Pokemon* const 
 }
 
 Pokemon::Health::Health() 
-	: frozen(0), asleep(0), poisoned(0),
-	burnt(0), paralyzed(0), confused(0),
-	isSick(false), hunger(0), repugnance(0),
+	: isSick(false), hunger(0), repugnance(0),
 	sanity(random(0.0, 0.6)) {}
 
 Pokemon::Stats::Stats(const int HP, const int ATK, const int DEF, 
@@ -349,4 +372,47 @@ Pokemon::Genders::Gender Pokemon::getGenderByPokedexEntry(const int no) {
 
 	return random(1, ratio.first + ratio.second) <= ratio.first 
 		? Genders::female : Genders::male;
+}
+
+void Pokemon::receiveDamage(int damage) {
+	currentStats.hp -= damage;
+	if (currentStats.hp <= 0) {
+		if (getWillToFight() >= random(0.0, 1.0))
+			currentStats.hp = (int)(random(0.01, 0.2) * maxStats.hp);
+		else
+			currentStats.hp = 0;
+	}
+}
+
+void Pokemon::receiveDamage(int damage, Attack* move, Pokemon* attacker) {
+	double pokemonPower = (attacker->getHappiness() * 200 + 10) / 250;
+	double finalDmg = move->category == Categories::physical ?
+		(double)attacker->currentStats.attack / currentStats.defense :
+		(double)attacker->currentStats.spattack / currentStats.spdefense;
+
+	double stab = attacker->type1 == move->type ||
+		attacker->type2 == move->type ? 1.5 : 1;
+	double type = getTypeAdvantageOverPokemon(move->type,
+		type1, type2);
+	double critical = 1;// move->criticalChance >= random(0.0, 1.0) ? 2 : 1;
+	double modifier = stab * type * critical * random(0.85, 1.0);
+	finalDmg = (finalDmg * pokemonPower * damage + 2) * modifier;
+
+	auto console = &((TrainerBattleScene*)Scene::getInstance())->console;
+
+	if (type == 0) {
+		console->write("It does not affect " + nickname + " at all.");
+	}
+	else {
+		if (type > 1)
+			console->write("It is super effective!");
+		if (type < 1)
+			console->write("It is not very effective...");
+	}
+
+	if (critical == 2) {
+		console->write("A critical hit!");
+	}
+	
+	receiveDamage(finalDmg);
 }

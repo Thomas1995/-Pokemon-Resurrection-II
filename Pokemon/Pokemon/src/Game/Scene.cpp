@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Game\Game.h"
 #include "Game\Scene.h"
+#include "Pokemons\Types.h"
 #include <assert.h>
 
 Scene* Scene::instance = nullptr;
@@ -31,6 +32,7 @@ TrainerBattleScene::TrainerBattleScene(Trainer* A, Trainer* B)
 		Position<float>(0, 300 * 1),
 		sf::Color::Black, sf::Color::White) {
 	assert(!A->pokemonInTeam.empty() && !B->pokemonInTeam.empty());
+	onBattleStart();
 }
 
 void TrainerBattleScene::draw(sf::RenderWindow& window) {
@@ -68,8 +70,15 @@ void TrainerBattleScene::draw(sf::RenderWindow& window) {
 
 	attackBar.draw(window);
 
-	std::vector<void*> attackBtnFctArgs(1);
-	attackBtnFctArgs[0] = (void*)&console;
+	static std::vector<void*> attackBtnFctArgs(5);
+
+	// on 0 there is the pointer to trainer to be used internally in the lambda function
+	attackBtnFctArgs[0] = (void*)trainerA;
+	// on 2 there is the index of the used pokemon
+	attackBtnFctArgs[2] = (void*)pokemonA;
+	// on 3 there is a pointer to the target
+	attackBtnFctArgs[3] = (void*)pokemonB;
+
 	Size<float> attackBtnSize(95 * unitSize.width, 22 * unitSize.height);
 	sf::Color attackBtnColor(222, 184, 135);
 
@@ -87,11 +96,30 @@ void TrainerBattleScene::draw(sf::RenderWindow& window) {
 		button.draw(window);
 
 		if (pokemonA->moves.size() > i) {
-			button.checkIfClicked(window, 
-				[](const std::vector<void*>& args) {
-				Graphics::Console* consolePtr = (Graphics::Console*)args[0];
-				consolePtr->write("abc");
-			}, attackBtnFctArgs);
+			if (pokemonA->moves[i].isUsable()) {
+
+				// on 4 there is a pointer to the attack used
+				attackBtnFctArgs[4] = (void*)&pokemonA->moves[i];
+
+				button.checkIfClicked(window,
+					[](const std::vector<void*>& args) {
+					// on 1 there is the type of action (1 = attack)
+					attackBtnFctArgs[1] = (void*)1;
+					MainTrainer* trainer = (MainTrainer*)args[0];
+					trainer->notify(args);
+
+				}, attackBtnFctArgs);
+
+			}
+			else {
+
+				button.checkIfClicked(window,
+					[](const std::vector<void*>& args) {
+					TrainerBattleScene* scene = (TrainerBattleScene*)Scene::getInstance();
+					scene->console.write("There is no PP left for this move.");
+
+				});
+			}
 		}
 	}
 
@@ -104,7 +132,8 @@ void TrainerBattleScene::draw(sf::RenderWindow& window) {
 
 	availablePokemonBar.draw(window);
 
-	static std::vector<void*> pokemonBarFctArgs(2);
+	static std::vector<void*> pokemonBarFctArgs(3);
+	// on 0 there is the pointer to trainer to be used internally in the lambda function
 	pokemonBarFctArgs[0] = (void*)trainerA;
 
 	for (int i = 0; i < trainerA->pokemonInTeam.size(); ++i) {
@@ -116,29 +145,69 @@ void TrainerBattleScene::draw(sf::RenderWindow& window) {
 
 		pokemonInTeam.draw(window);
 
-		pokemonBarFctArgs[1] = (void*)i;
-		if (!trainerA->pokemonInTeam[i]->isFainted()) {
+		// on 2 there is the index of the used pokemon
+		pokemonBarFctArgs[2] = (void*)i;
+		if (!trainerA->pokemonInTeam[i]->isFainted() && trainerA->pokemonInTeam[i] != pokemonA) {
 			pokemonInTeam.checkIfClicked(window, [](const std::vector<void*>& args) {
-				//Graphics::Console* consolePtr = (Graphics::Console*)args[0];
-				//++Scene::userActionsDisabledCount;
-				//consolePtr->write("Ana are mere. ");
+				// on 1 there is the type of action (0 = change pokemon)
+				pokemonBarFctArgs[1] = (void*)0;
 				MainTrainer* trainer = (MainTrainer*)args[0];
 				trainer->notify(args);
+
 			}, pokemonBarFctArgs);
 		}
 	}
 }
 
 void TrainerBattleScene::logic() {
+	atk.clear();
+
 	trainerA->takeTurnInBattle();
+
 	++Scene::userActionsDisabledCount;
 	trainerB->takeTurnInBattle();
+
+	if (atk.size() == 2)
+		if (atk[0].attacker->currentStats.speed < atk[1].attacker->currentStats.speed)
+			std::swap(atk[0], atk[1]);
+
+	if(atk.size() >= 1 && !atk[0].attacker->isFainted())
+		pokemonUsesMove(atk[0].attacker, atk[0].target, atk[0].move);
+
+	if (atk.size() == 2 && !atk[1].attacker->isFainted())
+		pokemonUsesMove(atk[1].attacker, atk[1].target, atk[1].move);
+
+	if (trainerA->checkIfTeamDead() || trainerB->checkIfTeamDead()) {
+		onBattleFinish();
+	}
+
 	--Scene::userActionsDisabledCount;
+}
+
+void TrainerBattleScene::onBattleStart() {}
+
+void TrainerBattleScene::onBattleFinish() {
+	Trainer* winner = trainerA;
+	Trainer* loser = trainerB;
+
+	if (trainerA->checkIfTeamDead())
+		std::swap(winner, loser);
+
+	console.write(winner->name + " has defeated " + loser->name + ".");
+
+	restorePokemonToDefault(trainerA);
+	restorePokemonToDefault(trainerB);
 }
 
 void TrainerBattleScene::switchOut(Trainer* trainer, Pokemon* chosenPokemon) {
 	if (trainer == trainerA) {
-		pokemonA = chosenPokemon;
+		if (pokemonA->traits.obedience >= random(0.0, 1.0)) {
+			pokemonA = chosenPokemon;
+		}
+		else {
+			console.write(pokemonA->nickname + " refused to leave the battle.");
+			return;
+		}
 	}
 	else {
 		pokemonB = chosenPokemon;
@@ -147,4 +216,50 @@ void TrainerBattleScene::switchOut(Trainer* trainer, Pokemon* chosenPokemon) {
 	console.write(trainer->name + " has switched out to " + chosenPokemon->nickname + ".");
 }
 
-void TrainerBattleScene::turn(Trainer* trainer) {}
+TrainerBattleScene::InternalAtk::InternalAtk(Pokemon* attacker, Pokemon* target, Attack* move)
+	: attacker(attacker), target(target), move(move) {}
+
+void TrainerBattleScene::pokemonWantsToUseMove(Pokemon* attacker, Pokemon* target, Attack* move) {
+	atk.push_back(InternalAtk(attacker, target, move));
+}
+
+void TrainerBattleScene::pokemonUsesMove(Pokemon* attacker, Pokemon* target, Attack* move) {
+	if (attacker->traits.obedience < random(0.0, 1.0)) {
+		if (random(1, 2) == 4) {
+			console.write(attacker->nickname + " refused to do anything.");
+			return;
+		}
+		else {
+			console.write(attacker->nickname + " decided to act on his own.");
+
+			std::vector<Attack*> availableMoves = attacker->getAvailableMoves();
+			move = availableMoves[random(0, availableMoves.size() - 1)];
+		}
+	}
+
+	double chanceToHit = (double)move->accuracy / 100 * 
+		(attacker->currentStats.accuracy / target->currentStats.evasiveness);
+
+	if (chanceToHit < random(0.0, 1.0)) {
+		console.write(attacker->nickname + " missed!");
+	}
+	else {
+		console.write(attacker->nickname + " used " + move->name + ".");
+		--move->pp;
+
+		int damage = move->getDamage(attacker, target);
+		if (damage > 0) {
+			target->receiveDamage(damage, move, attacker);
+		}
+	}
+}
+
+void TrainerBattleScene::restorePokemonToDefault(Trainer* trainer) {
+	for (auto pokemon : trainer->pokemonInTeam) {
+		int hp = pokemon->currentStats.hp;
+		pokemon->currentStats = pokemon->maxStats;
+		pokemon->currentStats.hp = hp;
+		pokemon->effectsInBattle.clear();
+		pokemon->timesBackOnFeet = 0;
+	}
+}
