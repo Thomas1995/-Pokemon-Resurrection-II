@@ -35,17 +35,22 @@ public:
 	void draw(sf::RenderWindow& window);
 	void logic();
 	void switchOut(Trainer* trainer, Pokemon* chosenPokemon);
-	void pokemonWantsToUseMove(Pokemon* attacker, Pokemon* target, Attack* move);
+	void pokemonWantsToUseMove(Pokemon* attacker, Attack* move);
 	void pokemonUsesMove(Pokemon* attacker, Pokemon* target, Attack* move);
 
 private:
+	int animationIndex = 0;
+	int animationCounter = 0;
+
 	struct InternalAtk {
-		Pokemon *attacker, *target;
+		Pokemon *attacker;
 		Attack *move;
 
-		InternalAtk(Pokemon* attacker, Pokemon* target, Attack* move);
+		InternalAtk(Pokemon* attacker, Attack* move);
 	};
 	std::vector<InternalAtk> atk;
 
+	void choosePokemonIfNecessary(Trainer*& trainer, Pokemon*& pokemon);
+	void checkIfPokemonFainted(Pokemon*& pokemon);
 	void restorePokemonToDefault(Trainer* trainer);
 };

@@ -15,8 +15,10 @@ public:
 	Trainer(const std::string trainerName);
 
 	virtual void takeTurnInBattle();
+	virtual Pokemon* choosePokemonInBattle();
 
 	bool checkIfTeamDead();
+	std::vector<Pokemon*> getAvailablePokemon();
 };
 
 class MainTrainer : public Trainer {
@@ -27,6 +29,7 @@ public:
 	MainTrainer(const std::string trainerName);
 
 	void takeTurnInBattle();
+	Pokemon* choosePokemonInBattle();
 	void notify(std::vector<void*> args);
 private:
 	std::vector< std::vector<void*> > notifications;

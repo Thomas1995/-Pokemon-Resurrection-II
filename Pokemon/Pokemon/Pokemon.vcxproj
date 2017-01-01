@@ -178,6 +178,7 @@
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\Graphics.cpp" />
     <ClCompile Include="src\Game\Scene.cpp" />
+    <ClCompile Include="src\Game\TrainerBattleScene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Pokemons\Attack.cpp" />
     <ClCompile Include="src\Pokemons\Pokemon.cpp" />

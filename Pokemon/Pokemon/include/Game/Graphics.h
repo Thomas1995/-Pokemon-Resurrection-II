@@ -81,7 +81,7 @@ namespace Graphics {
 			const sf::Color consoleColor, const sf::Color textColor);
 		void draw(sf::RenderWindow& window);
 		void clear();
-		void write(std::string msg);
+		void write(std::string msg = " ");
 	};
 
 	class Bar : public Drawable {
